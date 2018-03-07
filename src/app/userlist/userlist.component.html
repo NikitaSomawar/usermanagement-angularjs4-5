@@ -1,0 +1,166 @@
+
+
+
+<!--**********************************Add Buttton Code with Modal Box**********************************-->
+
+<div class="row">
+    <div class="col-md-12"> 
+      <div align="center">
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#adduserModal">Add</button>
+      </div>
+
+<div class="modal fade" id="adduserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" (blur)="formreset()">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 align='center' class="modal-title" id="exampleModalLabel" style='font-family: Arial, Helvetica, sans-serif;color: #4CAF50;text-decoration: underline;'>Add New User</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="formreset()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form (submit)="addUser()" #adduserform="ngForm">
+            <div class="form-group">
+              <label for="recipient-name" class="col-form-label">Name:</label>
+              <input type="text" class="form-control" [(ngModel)]="name" name="name" #inputname="ngModel" required pattern="[a-zA-Z a-zA-Z]+">
+              <div *ngIf="inputname.touched">
+                  <div class="alert alert-danger" *ngIf="inputname.errors?.required">Name is required!</div>
+                  <div class="alert alert-danger" *ngIf="inputname.errors?.pattern">Enter only alphabates</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="message-text" class="col-form-label">Email:</label>
+              <input type="email" class="form-control"  [(ngModel)]="email" name="email" #inputemail="ngModel" required pattern="[a-zA-Z0-9.!#$%&amp;'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$">
+              <div *ngIf="inputemail.touched" >
+                  <div class="alert alert-danger" *ngIf="inputemail.errors?.required">Email Id required!</div>
+                  <p class="alert alert-danger"  *ngIf="inputemail.errors?.pattern">Enter Valid Email Id</p>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="message-text" class="col-form-label">Country:</label>
+              <select class="form-control"  [(ngModel)]="country" name="country" #inputcountry="ngModel" required>
+                
+                <option *ngFor="let country of countries.countries" [ngValue]="country.name" >
+                  {{country.name}}
+                </option>
+              </select>
+              <div *ngIf="inputcountry.touched" >
+                  <div class="alert alert-danger" *ngIf="inputcountry.errors?.required">Country required!</div>
+                  
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="message-text" class="col-form-label">Age:</label>
+              <input type="number" class="form-control"  [(ngModel)]="age" #inputage="ngModel" name="age" required>
+              <div *ngIf="inputage.touched" >
+                  <div class="alert alert-danger" *ngIf="inputage.errors?.required">Age required!</div>
+                  
+              </div>
+            </div>
+           
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="formreset()">Close</button>
+              <input type="submit" class="btn btn-primary" [disabled]="adduserform.invalid">
+            </div>
+            <p style="color:green">{{add_status}}</p>
+          </form>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!--**********************************Table view for displaying user data**********************************-->
+
+  <div class="row">
+      <div class="col-md-12">
+          <table class="table">
+              <thead>
+                  <tr>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Country</th>
+                      <th>Age</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let user of userlist">
+                      <td>{{user.name}}</td>
+                      <td>{{user.email}}</td>
+                      <td>{{user.country}}</td>
+                      <td>{{user.age}}</td>
+                      <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModel" (click)="userDetails(user)">Update</button></td>
+                      <td><button class="btn btn-danger" (click)="deleterecord(user.id)" >delete</button></td>
+                  
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+  </div>
+
+<!--**********************************update Modal Box**********************************-->
+  
+  <div class="modal fade" id="updateModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 align='center' class="modal-title" id="exampleModalLabel" style='font-family: Arial, Helvetica, sans-serif;color: #4CAF50;text-decoration: underline;'>Update User Details</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form (submit)="UpdateUserDetails()" #edituserform="ngForm">
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Name:</label>
+                <input type="text" class="form-control" [(ngModel)]="editname" name="editname" #editinputname="ngModel" required pattern="[a-zA-Z a-zA-Z]+">
+                <div *ngIf="editinputname.touched">
+                    <div class="alert alert-danger" *ngIf="editinputname.errors?.required">Name is required!</div>
+                    <div class="alert alert-danger" *ngIf="editinputname.errors?.pattern">Enter only alphabates</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="message-text" class="col-form-label">Email:</label>
+                <input type="email" class="form-control"  [(ngModel)]="editemail" name="editemail" #editinputemail="ngModel" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{3}$">
+                <div *ngIf="editinputemail.touched" >
+                    <div class="alert alert-danger" *ngIf="editinputemail.errors?.required">Email Id required!</div>
+                    <p class="alert alert-danger"  *ngIf="editinputemail.errors?.pattern">Enter Valid Email Id</p>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="message-text" class="col-form-label">Country:</label>
+                <select class="form-control"  [(ngModel)]="editcountry" name="editcountry"  #editinputcountry="ngModel" required>
+                    <option value=''>Select Country</option>
+                    <option *ngFor="let country of countries.countries" value= {{country.name}}>
+                      {{country.name}}
+                    </option>
+                  </select>
+                <div *ngIf="editinputcountry.touched" >
+                    <div class="alert alert-danger" *ngIf="editinputcountry.errors?.required">Country required!</div>
+                    
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="message-text" class="col-form-label">Age:</label>
+                <input type="number" min="18" max="60" class="form-control"  [(ngModel)]="editage" name="editage" #editinputage="ngModel" name="age" required>
+                <div *ngIf="editinputage.touched" >
+                    <div class="alert alert-danger" *ngIf="editinputage.errors?.required">Age required!</div>
+                    
+                </div>
+              </div>
+                <input type="hidden" [(ngModel)]="editid" name="editid">
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <input type="submit" class="btn btn-primary" [disabled]="edituserform.invalid">
+              </div>
+              <p style="color:green">{{update_status}}</p>
+            </form>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  
